@@ -8,6 +8,9 @@ from an apropriate Web API endpoint.
 
 The example page uses the Web API provided from my [WebApiCoreExample project](https://github.com/miseeger/WebApiCoreExample).
 
+![PaginatorStart](https://github.com/miseeger/vue-bootstrap-paginator/blob/master/img/paginator_1.png?raw=true "Paginator first page")
+![PaginatorEnd](https://github.com/miseeger/vue-bootstrap-paginator/blob/master/img/paginator_2.png?raw=true "Paginator last page")
+
 The component itself needs to be fed with three properties:
 
 * __total-pages__ - The total page count of the data to be retrieved from the Web API (delivered with the API request).
