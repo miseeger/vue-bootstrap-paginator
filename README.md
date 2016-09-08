@@ -31,27 +31,27 @@ data: {
 In order to use the paginator component, the Vue element has to do two things:
 
 1) Initialize the row data to be displayed for and set the intial Page (usually page #1).
-    ```javascript
-    ready: function(){
-        this.$http.get('http://localhost:5000/api/stories/page/1')
+```javascript
+ready: function(){
+    this.$http.get('http://localhost:5000/api/stories/page/1')
+        .then(function(response){
+            this.$set('rows', response.data);
+            this.pagination.totalPages = response.data.pagination.lastPage;
+            this.pagination.currentPage = 1;
+        });
+}
+```
+2) Watch the currentPage property
+```javascript
+watch: {
+    'pagination.currentPage': function (val, oldVal) {
+        this.$http.get(this.apiUrl + val)
             .then(function(response){
                 this.$set('rows', response.data);
-                this.pagination.totalPages = response.data.pagination.lastPage;
-                this.pagination.currentPage = 1;
-            });
+            })
     }
-    ```
-2) Watch the currentPage property
-    ```javascript
-    watch: {
-        'pagination.currentPage': function (val, oldVal) {
-            this.$http.get(this.apiUrl + val)
-                .then(function(response){
-                    this.$set('rows', response.data);
-                })
-        }
-    } 
-    ```
+} 
+```
 
 When done, the paginator can be used:
 ```html
