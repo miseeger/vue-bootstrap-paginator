@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="de-DE">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="canonical" href="">
+<link rel="stylesheet" href="content/bootstrap.min.css">
+<link rel="stylesheet" href="content/font-awesome/css/font-awesome.min.css">
+
+<head>
+    <title>Vue.js Bootstrap Paginator Example</title>
+</head>
+
+<body>
+
+    <div class="container" id="app">
+
+        <div class="col-md-12">
+            <h1>Let's hear some stories!</h1>
+            <bs-paginator :total-pages="pagination.totalPages" :pages-per-segment="pagination.pagesPerSegment" :current-page.sync="pagination.currentPage">
+            </bs-paginator>
+        </div>
+
+        <div class="col-md-12">
+
+            <table class="table-striped table-bordered">
+                <col width=5%>
+                <col width=70%>
+                <col width=25%>
+                <col width=10%>
+                <tr>
+                    <th>#</th>
+                    <th>Plot</th>
+                    <th>Writer</th>
+                    <th>Upvotes</th>
+                </tr>
+                <tr v-for="story in rows.data">
+                    <td>{{ story.id }}</td>
+                    <td>{{ story.plot }}</td>
+                    <td>{{ story.writer }}</td>
+                    <td>{{ story.upvotes }}</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/vue.resource/1.0.0/vue-resource.min.js"></script>
+    <script src="bootstrap-paginator.js"></script>
+    <script>
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                pagination: {
+                    pagesPerSegment: 2,
+                    totalPages: 0,
+                    currentPage: 0                    
+                },
+                apiUrl: 'http://localhost:5000/api/stories/page/',
+                rows: []
+            },
+            ready: function(){
+                this.$http.get('http://localhost:5000/api/stories/page/1')
+                    .then(function(response){
+                        this.$set('rows', response.data);
+                        this.pagination.totalPages = response.data.pagination.lastPage;
+                        this.pagination.currentPage = 1;
+                    });
+            },
+            watch: {
+                'pagination.currentPage': function (val, oldVal) {
+                    this.$http.get(this.apiUrl + val)
+                    .then(function(response){
+                        this.$set('rows', response.data);
+                    })
+                },
+            }
+        })  
+
+    </script>
+
+</body>
+
+</html>
